@@ -7,6 +7,13 @@
     <!-- <script src="\myStaticFiles\js\home.js"></script> -->
 </head>
 <body>
-Hello Your name is -- <%= name %>
+    <%- include('template.ejs',{variable: name}); %>
+    Friends:
+    <% for(let i=0;i<arr.length;i++){  %>
+        <b><%= arr[i] %></b> 
+    
+    <% } %>
+
+
 </body>
 </html>
