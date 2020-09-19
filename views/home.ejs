@@ -7,13 +7,9 @@
     <!-- <script src="\myStaticFiles\js\home.js"></script> -->
 </head>
 <body>
-    <%- include('template.ejs',{variable: name}); %>
-    Friends:
-    <% for(let i=0;i<arr.length;i++){  %>
-        <b><%= arr[i] %></b> 
-    
-    <% } %>
 
-
+        <%- include('todosForm.ejs'); %>
+        <%- include('todosView.ejs',{todo: todo}); %>
+        
 </body>
 </html>

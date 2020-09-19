@@ -1,10 +1,13 @@
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var dbCon = require('./configuration/db');
 var app = express(); 
 //Comment
 app.listen(8000);
 app.set('view engine','ejs');
+app.use(session({secret: "mysecret",resave:false, saveUninitialized:false, cookie: { maxAge:90000}}));
 //Middleware
 //app.use('/myStaticFiles',express.static('static'));
 app.use(bodyParser.urlencoded({extended:false}));
@@ -20,8 +23,12 @@ var middleware = function(req,res,next){
     next(); // Never send any data inside this
 }
 app.get('/home',function(req,res){
-    console.log(req.local);
-    res.render('home.ejs', { name : "<b>Mohit</b>" , value : { key: "value"}, arr: "String"} );
+    //res.render('home.ejs',{view: null});
+    let query = "SELECT * FROM todos ORDER BY id DESC";
+    dbCon.query(query,function(err,result){
+        if(err) throw err;
+        res.render('home.ejs', { view: true, todo : result } );
+    });
 });
 
 app.get('/about/:userName/:password',function(req,res){
@@ -37,3 +44,6 @@ app.get('/contact',function(req,res){
 app.post('/contact',function(req,res){
     console.log(req.body);
 });
+
+let todo = require('./routes/todo');
+app.use('/todo',todo);
